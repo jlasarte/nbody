@@ -5,42 +5,64 @@ import java.awt.Color;
 import nbody.model.universe.ParallelBalancedBarnesHutUniverse.coordinate;
 
 /**
+ *
+ * Representa un Cuerpo ubicado en un punto en el espacio, con velocidad y fuerzas que actuan sobre él.
  * 
  * @author jlasarte
- *
  */
-/**
- * Body.java
- *
- * Represents a Body (a point mass) and its position, 
- * velocity, mass, color, and the net force acting upon it.
- *
- * @author chindesaurus
- * @version 1.00
- */
-
-
 public class Body {
 
-    // gravitational constant
+	/**
+	 * Constante gravitatoria universal.
+	 */
     private static final double G = 6.67e-11;
-
+    
+    /**
+     * Trabajo asociado con la actualización de fuerza de este cuerpo. Utilizado para el balanceo de carga.
+     */
     private int work;
-    private double rx, ry;       // position
-    private double vx, vy;       // velocity
-    private double fx, fy;       // force
-    private double mass;         // mass
-    private Color color;         // color
+    /**
+     * Posición en el eje X 
+     */
+    private double rx;
+    /**
+     * Posición en el eje Y
+     */
+    private double ry;
+    /**
+     * Velocidad en el eje X
+     */
+    private double vx;
+    /**
+     * Velocidad en el eje Y
+     */
+    private double vy;
+    /**
+     * Fuerza que actua sobre este cuerpo sobre el eje X
+     */
+    private double fx;
+    /**
+     * Fuerza que actua sobre este cuerpo sobre el eje Y
+     */
+    private double fy; 
+    /**
+     * Masa de este cuerpo.
+     */
+    private double mass;
+    /**
+     * Color del cuerpo, utilizado para la visualización.
+     */
+    private Color color;
 
     /**
-     * Constructor: creates and initializes a new Body.
+     * Constructor: crea a inicializa un nuevo cuerpo.
      *
-     * @param rx    the x-position of this new body
-     * @param ry    the y-position of this new body
-     * @param vx    the x-velocity of this new body
-     * @param vy    the y-velocity of this new body
-     * @param mass  the mass of this new body
-     * @param color the color of this new body (RGB)
+     * @param rx    posicion en el eje x
+     * @param ry    posicion en el eje y
+     * @param vx    velocidad sobre x
+     * @param vy    velocidad sobre y
+     * @param mass  masa del cuerpo
+     * @param color color del cuerpo
      */
     public Body(double rx, double ry, double vx, double vy, double mass, Color color) {
         this.setRx(rx);
@@ -53,10 +75,8 @@ public class Body {
     }
 
     /**
-     * Updates the velocity and position of the invoking Body
-     * using leapfrom method, with timestep dt.
-     *
-     * @param dt the timestep for this simulation
+     * Acutaliza la velocidad y posicion del cuerpo con un paso dt
+     * @param dt el delta tiempo para esta simulación.
      */
     public void update(double dt) {
         vx += dt * fx / mass;
@@ -66,10 +86,10 @@ public class Body {
     }
 
     /**
-     * Returns the Euclidean distance between the invoking Body and b.
+     * Retorna la distancia entre este cuerpo y otro.
      *
-     * @param b the body from which to determine the distance
-     * @return  the distance between this and Body b
+     * @param b el cuerpo hacia el cual determinar la distancia.
+     * @return la distancia entre este cuerpo y b,
      */
     public double distanceTo(Body b) {
         double dx = rx() - b.rx();
@@ -78,7 +98,7 @@ public class Body {
     }
 
     /**
-     * Resets the force (both x- and y-components) of the invoking Body to 0.
+     * Resetea las fuerzas actuando sobre el cuerpo a 0.
      */
     public void resetForce() {
         fx = 0.0;
@@ -86,10 +106,9 @@ public class Body {
     }
 
     /** 
-     * Computes the net force acting between the invoking body and b, and
-     * adds this to the net force acting on the invoking Body.
+     * Calcula la fuerza actuando entre este cuerpo y b y la suma a este cuerpo.
      *
-     * @param b the body whose net force on this body to calculate
+     * @param b el cuerpo cuya fuerza sobre este cuerpo calcular.
      */
     public void addForce(Body b) {
         Body a = this;

@@ -2,25 +2,42 @@ package nbody.console;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-
 import nbody.model.universe.*;
 
 /**
- * Mini programita de consola para probar el desempeño de los diferentes algoritmos.
- * @author julia
+ * <p>
+ * Mini programita de consola para probar los diferentes algoritmos.
+ * </p>
+ *  Argumentos
+ *  <ul>
+ * 		<li>-i,--iteraciones=N: El algortimo se ejecuta durante <b>N</b> iteraciones. </li>
+ * 		<li>-dt,--delta=DELTA: El algoritmo se ejecuta utilizando <b>DELTA</b> como parámetro para los pasos de la simulación. </li>
+ *		<li>-a,--algoritmo=ALGORITMO: El programa se ejecuta utilizando el <b>ALGORITMO</b> seleccionado. El algoritmo puede ser una de las siguientes opciones: 
+ *			<ul>
+ *				<li>brute: algoritmo de fuerza bruta particula a particula</li>
+ *				<li>brutep: algoritmo de fuerza bruta paralelizado</li>
+ *				<li>barnes: algoritmo de Barnes y Hut</li>
+ *				<li>barnesp: algoritimo de Barnes y Hut paralelizado</li>
+ *				<li>barnespb: algoritmo de Barnes y Hut paralelizado y utlizando balanceo de carga por ORB.</li>
+ *		</li>
+ *		<li>-f,--file=ARCHIVO: El <b>ARCHIVO</b> de donde cargar los datos de los cuerpos. Se incluyen algunos archivos de ejemplo en el código fuente de este programa.</li>
+ *		<li>-n,--ncuerpos=N: El algoritmo se corre con <b>N</b> cantidad de cuerpos random.</li>
+ *	</ul>
+ * 
+ * @author jlasarte
  *
  */
 public class NBody {
 	
 	/**
-	 * 
-	 * @param args
+	 * Corre el programa
+	 * @param args argumentos. @see Nbody
 	 */
 	public static void main(String[] args) {
-	
+		//TODO: usar los argumentos que documentamos je.
 		// revisamos los parametros
         if (args.length != 4) {
-            System.err.println("Usage: java NBody T delta_t algorithm datafile ");
+            System.err.println("Usage: java NBody -i delta_t algorithm datafile ");
             System.exit(1);
         }
         

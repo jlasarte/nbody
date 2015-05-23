@@ -26,11 +26,12 @@ import java.io.File;
 import javax.swing.Action;
 import javax.swing.JTextField;
 
-public class MainFrame extends JFrame {
-
-	/**
-	 * 
-	 */
+/**
+ * Aplicación gráfica para la simulación, con visualización de los cuerpos y su movimiento.
+ * @author julia
+ */
+public class NBodyGUI extends JFrame {
+	
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private SimulationPanel simulationPanel;
@@ -41,14 +42,15 @@ public class MainFrame extends JFrame {
     private JMenuBar menu_bar;
     private JTextField delta_t_field;
     private JTextField time_field;
-	/**
+	
+    /**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainFrame frame = new MainFrame();
+					NBodyGUI frame = new NBodyGUI();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -57,7 +59,10 @@ public class MainFrame extends JFrame {
 		});
 	}
 	
-	public void buildMenu() {
+	/**
+	 * Construye el menu de la aplicación.
+	 */
+	private void buildMenu() {
 
 		this.menu_bar = new JMenuBar();
 		setJMenuBar(this.menu_bar);
@@ -75,9 +80,9 @@ public class MainFrame extends JFrame {
 	}
 
 	/**
-	 * Create the frame.
+	 * Crea el frame principal de la aplicación.
 	 */
-	public MainFrame() {
+	public NBodyGUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 640);
 		this.simulation_running = false;
@@ -112,7 +117,7 @@ public class MainFrame extends JFrame {
 		delta_t_field.setColumns(10);
 		
 		btnNewButton.setForeground(new Color(0, 0, 0));
-		btnNewButton.setIcon(new ImageIcon(MainFrame.class.getResource("/com/sun/javafx/webkit/prism/resources/mediaPlayDisabled.png")));
+		btnNewButton.setIcon(new ImageIcon(NBodyGUI.class.getResource("/com/sun/javafx/webkit/prism/resources/mediaPlayDisabled.png")));
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -135,7 +140,10 @@ public class MainFrame extends JFrame {
 
 	}
 	
-	public void what() {
+	/**
+	 * Abre un archivo de cuerpos y carga los cuerpos en el universo actual.
+	 */
+	public void openFile() {
 		int retval = fileChooser.showOpenDialog(contentPane);
 		 if (retval == JFileChooser.APPROVE_OPTION) {
                //... The user selected a file, get it, use it.
@@ -145,17 +153,28 @@ public class MainFrame extends JFrame {
 		 }
 	}
 	
+	/**
+	 * Acción ejecutada cuando se selecciona en el menu "abrir archivo".
+	 * @author julia
+	 *
+	 */
 	private class SwingAction extends AbstractAction {
-		/**
-		 * 
-		 */
+
 		private static final long serialVersionUID = 6888240617193674700L;
+		/**
+		 * Constructor
+		 * @param title  El titulo de la acción.
+		 */
 		public SwingAction(String title) {
 			putValue(NAME, "Abrir Archivo");
 			putValue(SHORT_DESCRIPTION, "Some short description");
 		}
+		/**
+		 * Evento que se ejecuta cuando la acción ocurre.
+		 * @param e evento.
+		 */
 		public void actionPerformed(ActionEvent e) {
-			what();
+			openFile();
 		}
 	}
 }

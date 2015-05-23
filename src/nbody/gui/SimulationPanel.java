@@ -19,19 +19,33 @@ import javax.swing.Timer;
 import nbody.model.Body;
 import nbody.model.universe.*;
 
+/**
+ * Panel donde se anima la simulación del movimiento de los N-cuerpos.
+ * @author jlasarte
+ */
 public class SimulationPanel extends JPanel {
-
-
-    /**
-	 * 
+	/**
+	 * serialVerison
 	 */
 	private static final long serialVersionUID = 1L;
-	public int x 	= 10;	//Start Drawing from X=10	
-    public int delay 	= 5; 	//milliseconds
+	/**
+	 * delay, en milisegundos, utilizado para refrescar la pantalla.
+	 */
+	public int delay 	= 5; 	//milliseconds
+	/**
+	 * Variable UniverseTemplate que contiene al universo actual.
+	 */
     private UniverseTemplate u;
+    /**
+     * Timer utilizado para refrescar la pantalla.
+     */
     private Timer t;
 	private JButton reset;
 	private String selected_universe;
+	
+	/**
+	 * Constructor.
+	 */
     public SimulationPanel()
     {
     	//this.u = new SecuentialBruteForceUniverse();
@@ -52,23 +66,35 @@ public class SimulationPanel extends JPanel {
 
     }
     
+    /**
+     * Resetea el universo actual con los datos originales.
+     */
     protected void reset() {
 		this.initialize(selected_universe);
 		this.repaint();
 	}
 
+    /**
+     * Inicializa el panel, cargando la simulación.
+     * @param universe
+     */
 	public void initialize(String universe) {
+		// TODO: revisar el caso de que se abra un archivo con errores o con el formato incorrecto.
     	this.selected_universe = universe;
     	try {
 			u.initialize(universe);
 	    	this.reset.setVisible(true);
 	    	this.repaint();
 		} catch (FileNotFoundException e) {
-			JOptionPane.showMessageDialog(null, "My Goodness, this is so concise");
+			JOptionPane.showMessageDialog(null, "Error al abrir el archivo.");
 		}
 
     }
     
+	/**
+	 * Comienza la simulación
+	 * @param dt el delta tiempo para utilizar en las simulaciones.
+	 */
     public void start(double dt) {
     	 ActionListener counter = new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) 
@@ -81,6 +107,11 @@ public class SimulationPanel extends JPanel {
     	this.t.start();
     }
 
+    /**
+     * Convierte una coordenada cartesiana X en un punto en el frame utilizando el radio del universo actual.
+     * @param x coordenada cartesiana sobre el eje X
+     * @return punto en el frame.
+     */
     public double convertX(double x) {
     	double min = - u.scale();
     	double max = u.scale();
@@ -88,6 +119,11 @@ public class SimulationPanel extends JPanel {
     	return (this.getWidth()) * (x - min) / (max - min);
     }
     
+    /**
+     * Convierte una coordenada cartesiana Y en un punto en el frame untilizando el radio del universo actual.
+     * @param y coordenada cartesiana sobre el eje Y
+     * @return punto en el frame.
+     */
     public double convertY(double y) {
     	double min = - u.scale();
     	double max = u.scale();
@@ -107,7 +143,10 @@ public class SimulationPanel extends JPanel {
 			g2d.fill(new Ellipse2D.Double(convertX(b.rx()), convertY(b.ry()), 5,5));
 		}
     }
-
+    
+    /**
+     * Detiene la simulación.
+     */
 	public void stop() {
 		t.stop();
 	}

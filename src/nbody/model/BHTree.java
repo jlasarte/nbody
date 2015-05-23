@@ -3,32 +3,47 @@ package nbody.model;
 
 /**
  * BHTree.java
+ * 
+ * Representa un quadtree para el algorítmo de Barnes y Hut
  *
- * Represents a quadtree for the Barnes-Hut algorithm.
  *
- * Dependencies: Body.java Quad.java
- *
- * @author chindesaurus
- * @version 1.00 
+ * @author jlasarte
  */
 public class BHTree {
 
-    // threshold value
-    protected final double Theta = 0.5;
-
-    protected Body body;     // body or aggregate body stored in this node
-    protected Quadrant quad;     // square region that the tree represents
-    protected BHTree NW;     // tree representing northwest quadrant
-    protected BHTree NE;     // tree representing northeast quadrant
-    protected BHTree SW;     // tree representing southwest quadrant
-    protected BHTree SE;     // tree representing southeast quadrant
+	/**
+	 * parámetro frontera utilizado para decidir si un cuerpo esta lo suficientemente lejos de otro y así aproximar el calculo utilizando su nodo padre.
+	 * Thetas mayores generan mayor presición, pero disminuyen la velocidad. Sí Theta = 0 el algoritmo degenera a una versión secuencial.
+	 */
+	protected final double Theta = 0.5;
+	/**
+	 * Cuerpo o "Grupo de cuerpos" de este nodo. Si es un nodo que aproxima un grupo de cuerpos simplemente guardamos la sumatoria de las masas.
+	 */
+    protected Body body;     
+    /**
+     * Cuadrante representado por este Arbol.
+     */
+    protected Quadrant quad;  
+    /**
+     * BHTree del cuadrante noroeste.
+     */
+    protected BHTree NW;
+    /**
+     * BHTree del cuadrante noreste
+     */
+    protected BHTree NE;
+    /**
+     * BHTree del cuadrante sudoeste
+     */
+    protected BHTree SW;
+    /**
+     * BHTree del cuadrante sudeste.
+     */
+    protected BHTree SE;
   
     /**
-     * Constructor: creates a new Barnes-Hut tree with no bodies. 
-     * Each BHTree represents a quadrant and an aggregate body 
-     * that represents all bodies inside the quadrant.
-     *
-     * @param q the quadrant this node is contained within
+     * Constructor. Crea un nuevo BTree vacio.
+     * @param q el cuadrante dentro del que este árbol esta contenido.
      */
     public BHTree(Quadrant q) {
         this.quad = q;
@@ -41,39 +56,39 @@ public class BHTree {
  
 
     /**
-     * Adds the Body b to the invoking Barnes-Hut tree.
+     * Inserta recursivamente un nuevo cuerpo al árbol
+     * @param b cuerpo a insertar. Al insertar el cuerpo se resetea el trabajo asociado al calculo de fuerzas utlizado en ORB. 
+     * @see Body 
+     * @see ParallelBalancesBarnesHutUniverse
      */
     public void insert(Body b) {
-
-        // if this node does not contain a body, put the new body b here
+    	
+    	// si el nodo esta vacío insertamos el nodo.
         if (body == null) {
-        	b.resetWork();
+        	b.resetWork(); // reseteamos el trabajo de un cuerpo.
             body = b;
             return;
         }
   
-        // internal node
         if (! isExternal()) {
-            // update the center-of-mass and total mass
-            body = body.plus(b);
-        
-            // recursively insert Body b into the appropriate quadrant
+        	// si no es hoja, además de insertar el nodo tenemos que actualizar el centro de gravedad y la masa.
+        	body = body.plus(b);
+        	// insertamos el nodo en el cuadrante que corresponda
             putBody(b);
         }
 
-        // external node
         else {
-            // subdivide the region further by creating four children
-            NW = new BHTree(quad.NW());
+        	// si el nodo es hoja y tiene un cuerpo, tenemos que subdividirlo en cuadro nuevos nodos.
+        	NW = new BHTree(quad.NW());
             NE = new BHTree(quad.NE());
             SE = new BHTree(quad.SE());
             SW = new BHTree(quad.SW());
 
-            // recursively insert both this body and Body b into the appropriate quadrant
+            //insertamos el cuerpo actual y el nodo nuevo en el cuadrante que corresponda
             putBody(this.body);
             putBody(b);
 
-            // update the center-of-mass and total mass
+            // y actualizamos el centro de masa del cuerpo actual.
             body = body.plus(b);
         }
     }
@@ -81,7 +96,7 @@ public class BHTree {
     
 
     /**
-     * Inserts a body into the appropriate quadrant.
+     * Inserta un cuerpo en el BHtree del cuadrante que corresponda.
      */ 
     protected void putBody(Body b) {
         if (b.in(quad.NW()))
@@ -96,7 +111,7 @@ public class BHTree {
 
 
     /**
-     * Returns true iff this tree node is external.
+     * verdadero si el nodo actual es una hoja.
      */
     protected boolean isExternal() {
         // a node is external iff all four children are null
@@ -105,32 +120,34 @@ public class BHTree {
 
 
     /**
-     * Approximates the net force acting on Body b from all bodies
-     * in the invoking Barnes-Hut tree, and updates b's force accordingly.
+     * Calcula la fuerza actuando sobre un cuerpo b desde todos los cuerpos, aproximando en los casos que sea posible y actualiza la fuerza de b de acuerdo al resultado.
      */
     public void updateForce(Body b) {
+    	// incrementamos el trabajo asociado con el calculo de fuerza del cuerpo b, utlizado por el ORB en el algoritmo paralelo con balanceo de carga
     	b.incWork();
+    	// caso base, llegamos al final o encontramos el cuerpo
         if (body == null || b.equals(body))
             return;
         
-        // if the current node is external, update net force acting on b
+        // Si estamos en una hoja, agregar la fuerza del cuerpo a b
         if (isExternal()) 
             b.addForce(body);
  
-        // for internal nodes
+       
         else {
-    
-            // width of region represented by internal node
+        	
+            //ancho del cuadrante representado por el nodo
             double s = quad.length();
 
-            // distance between Body b and this node's center-of-mass
+            // distancia entre b y el centro de masa de este nodo
             double d = body.distanceTo(b);
 
-            // compare ratio (s / d) to threshold value Theta
+            // comparamos s/d con el parametro frontera 
             if ((s / d) < Theta)
-                b.addForce(body);   // b is far away
+            	// el grupo de cuerpos representado por este nodo está lo suficientemente lejos como para poder aproximarlo como un único cuerpo.
+                b.addForce(body);
             
-            // recurse on each of current node's children
+            // sino esta lo suficientemente lejos tenemos que actualizar con cada uno de sus hijos.
             else {
                 NW.updateForce(b);
                 NE.updateForce(b);
