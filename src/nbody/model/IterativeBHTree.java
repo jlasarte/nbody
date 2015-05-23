@@ -17,7 +17,6 @@ import java.util.Stack;
  *
  */
 public class IterativeBHTree extends BHTree {
-	//TODO: revisar porque explotan las cosas!
 	/**
 	 * Guarda el estado actual de la iteración.
 	 * @author julia
@@ -39,6 +38,8 @@ public class IterativeBHTree extends BHTree {
     	SnapShot currentSS = new SnapShot();
     	currentSS.b = b;
     	currentSS.thisbh = this;
+    	
+    	snapShotStack.push(currentSS);
     	
     	while (!snapShotStack.empty()) {
     		SnapShot c = snapShotStack.pop();

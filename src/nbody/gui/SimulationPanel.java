@@ -12,12 +12,16 @@ import java.awt.geom.Ellipse2D;
 import java.io.FileNotFoundException;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import nbody.model.Body;
 import nbody.model.universe.*;
+
+import javax.swing.JTextPane;
+import javax.swing.JTextField;
 
 /**
  * Panel donde se anima la simulación del movimiento de los N-cuerpos.
@@ -57,12 +61,12 @@ public class SimulationPanel extends JPanel {
     	//this.u = new SecuentialBruteForceUniverse();
     	//this.u = new BarnesHutUniverse();
     	//this.u = new ParallelBruteForceUniverse();
-    	//this.u = new ParallelBarnesHutUniverse();
-    	this.u = new ParallelBalancedBarnesHutUniverse();
+    	this.u = new ParallelBarnesHutUniverse();
+    	//this.u = new ParallelBalancedBarnesHutUniverse();
 		this.reset = new JButton("Reset");
 		this.reset.setVisible(false);
 		this.add(reset);
-		
+
 		this.reset.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -141,14 +145,21 @@ public class SimulationPanel extends JPanel {
 		
 		Graphics2D g2d = (Graphics2D)g;
 		super.paintComponent(g2d);
-		g2d.setColor(Color.red);
 
 	    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		for (Body b : this.u.bodies()) {
+	    drawCartesianAxis(g2d);
+	    for (Body b : this.u.bodies()) {
 			g2d.setColor(b.color());
 			g2d.fill(new Ellipse2D.Double(convertX(b.rx()), convertY(b.ry()), 5,5));
 		}
     }
+
+	private void drawCartesianAxis(Graphics2D g2d) {
+		g2d.setColor(Color.GRAY);
+	    g2d.drawLine(this.getWidth()/2, 0, this.getWidth()/2, this.getHeight());
+	    g2d.drawLine(0, this.getHeight()/2, this.getWidth(), this.getHeight()/2);
+
+	}
     
     /**
      * Detiene la simulación.

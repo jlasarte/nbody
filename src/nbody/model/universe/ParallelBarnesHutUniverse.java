@@ -8,7 +8,7 @@ import nbody.model.BHTree;
 import nbody.model.Body;
 import nbody.model.IterativeBHTree;
 import nbody.model.Quadrant;
-
+//TODO: revisar hay dos que se quedan quietos!!
 public class ParallelBarnesHutUniverse extends BarnesHutUniverse {
 	/**
 	 * arreglo de threads

@@ -389,7 +389,7 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 	public void update(double dt) {
 		
 		Quadrant quad = new Quadrant(0, 0, this.R * 2);
-        this.setBodiesTree(new BHTree(quad));
+        this.setBodiesTree(new IterativeBHTree(quad));
         this.resetBodyListInDividerThreads();
         this.current_dt = dt;
         
