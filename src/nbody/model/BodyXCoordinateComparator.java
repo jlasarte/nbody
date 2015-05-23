@@ -2,7 +2,12 @@ package nbody.model;
 
 import java.util.Comparator;
 
-
+/**
+ * Compara dos cuerpos con respecto a su posición en el eje X
+ * Los desempates se resuelven con el trabajo asociado al cuerpo.
+ * @author jlasarte
+ *
+ */
 public class BodyXCoordinateComparator implements Comparator<Body> {
 
 	@Override

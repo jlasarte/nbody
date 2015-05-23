@@ -32,19 +32,45 @@ import javax.swing.JTextField;
  */
 public class NBodyGUI extends JFrame {
 	
-	private static final long serialVersionUID = 1L;
+	/**
+	 * variable para seialización.
+	 */
+	private static final long serialVersionUID = 5439677820771990289L;
+	/**
+	 * Panel principal del contenido.
+	 */
 	private JPanel contentPane;
+	/**
+	 * Panel que contiene la simulación.
+	 */
 	private SimulationPanel simulationPanel;
+	/**
+	 * Variable para indicar si actualmente se esta corriendo la simulación.
+	 */
 	private boolean simulation_running;
-	private final Action action = new SwingAction("Abrir ARCHIV");
+	/**
+	 * Acción que se ejecuta cuando el usuario habre un archivo.
+	 */
+	private final Action action = new SwingAction("Abrir Archivo");
+	/**
+	 * Seleccionador de archivo
+	 */
     private JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
+    /**
+     * Universo actual, seleccionado por el usuario.
+     */
     private String selected_universe = "";
+    /**
+     * Barra de menu.
+     */
     private JMenuBar menu_bar;
+    /**
+     * Delta tiempo elegido por el usuario
+     */
     private JTextField delta_t_field;
-    private JTextField time_field;
 	
     /**
-	 * Launch the application.
+	 * Inicia la aplicación.
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -105,14 +131,11 @@ public class NBodyGUI extends JFrame {
 		JLabel lblTt = new JLabel("Tiempo");
 		panel.add(lblTt);
 		
-		time_field = new JTextField();
-		panel.add(time_field);
-		time_field.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel("DeltaT");
 		panel.add(lblNewLabel);
 		
-		delta_t_field = new JTextField();
+		delta_t_field = new JTextField("1");
 		panel.add(delta_t_field);
 		delta_t_field.setColumns(10);
 		
@@ -155,7 +178,6 @@ public class NBodyGUI extends JFrame {
 	
 	/**
 	 * Acción ejecutada cuando se selecciona en el menu "abrir archivo".
-	 * @author julia
 	 *
 	 */
 	private class SwingAction extends AbstractAction {

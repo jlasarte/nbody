@@ -40,7 +40,13 @@ public class SimulationPanel extends JPanel {
      * Timer utilizado para refrescar la pantalla.
      */
     private Timer t;
+    /**
+     * Botón para resetear la simulación
+     */
 	private JButton reset;
+	/**
+	 * Universo actual
+	 */
 	private String selected_universe;
 	
 	/**

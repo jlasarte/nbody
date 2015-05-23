@@ -200,18 +200,27 @@ public class Body {
 			return this.ry > q.ymin && this.ry < q.ymax && this.rx > spc.x && this.rx < q.xmax;
 		}
 	}
-
+	
+	/**
+	 * Devuelve el trabajo asociado con la actualización de fuerza de este cuerpo.
+	 * Utilizado por el algorítmo de ORB en ParallelBalancedBarnesHutUniverse
+	 * @return trabajo asociado con la actualización de este cuerpo.
+	 */
 	public int work() {
-		// TODO Auto-generated method stub
 		return this.work;
 	}
 	
+	/**
+	 * Incrementa el trabajo asociado al cuerpo.
+	 */
 	public void incWork() {
 		this.work++;
 	}
 
+	/**
+	 * Resetea el trabajo asociado a este cuerpo a 1.
+	 */
 	public void resetWork() {
-		// TODO Auto-generated method stub
 		this.work = 1;
 	}
 }

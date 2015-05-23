@@ -2,7 +2,12 @@ package nbody.model;
 
 import java.util.Comparator;
 
-
+/**
+ * Compara dos cuerpos con respecto a su posición en el eje Y. 
+ * Los empates se reuelven usando el trabajo asociado al cuerpo.
+ * @author jlasarte.
+ *
+ */
 public class BodyYCoordinateComparator implements Comparator<Body> {
 
 	@Override

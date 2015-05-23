@@ -6,8 +6,6 @@ package nbody.model;
  * Represents quadrants for the Barnes-Hut algorithm. 
  *
  *
- * @author jlasarte
- * @version 1.00
  */
 
 public class Quadrant {
