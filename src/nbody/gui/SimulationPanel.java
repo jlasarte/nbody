@@ -83,7 +83,7 @@ public class SimulationPanel extends JPanel {
 
     /**
      * Inicializa el panel, cargando la simulación.
-     * @param universe
+     * @param universe el archivo donde se encuentran los cuerpos a cargar.
      */
 	public void initialize(String universe) {
 		// TODO: revisar el caso de que se abra un archivo con errores o con el formato incorrecto.

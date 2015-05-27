@@ -5,11 +5,13 @@ import java.util.Stack;
 /**
  * Subclase de BHTree que implementa todos sus métodos recursivos de manera iterativa.
  * cuando java crea un thread, le adjudica una cierta cantidad de memoria en el stack. 
+ * <p>
  * Lo que sucede entonces es que al crearse una thread, la thread principal pierde 1MB
  * (aproximadamente, depende de la configuración de cada usuario) de memoria. En general,
  * esto no es un problema, pero al construir un arbol de manera recursiva con 50.000 o
  * 100000 elementos, nos encontramos con problemas de stack overflow en la construcción
  * y actualización del árbol.
+ * <p>
  * Debido a que JAVA no implementa optimizaciones para tail-recursión, la opción más 
  * viable fue la implementación de una subclase iterativa de BHTree
  * 

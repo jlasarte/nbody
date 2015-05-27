@@ -54,7 +54,9 @@ public interface UniverseInterface {
 	 */
 	public Body[] bodies();
 	/**
-	 * 
+	 * Inicializa el universo con cuerpos colocados de manera aletaria.
+	 * @param number_bodies cantidad de cuerpos a crear en el universo.
+	 * @param radius radio del universo
 	 */
 	public void initialize_random(int number_bodies, double radius);
 }
