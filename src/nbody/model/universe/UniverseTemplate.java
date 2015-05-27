@@ -12,21 +12,21 @@ import nbody.model.Body;
 public abstract class UniverseTemplate implements UniverseInterface {
 	
 	/**
-	 * n�mero de cuerpos en el universo
+	 * número de cuerpos en el universo
 	 */
 	protected int N = 0;
 	/**
-	 * Radio del universo, usado para escalar la visualizaci�n
+	 * Radio del universo, usado para escalar la visualización
 	 */
 	protected double R = 0.0;
 	
 	/**
 	 * Arreglo de cuerpos en el universo.
 	 */
-	protected Body[] bodies_array = new Body[0]; // inicializamos en 0 para no tener problemas ocn la visalizaci�n hasta que el universo se inicializa.
+	protected Body[] bodies_array = new Body[0]; // inicializamos en 0 para no tener problemas ocn la visalización hasta que el universo se inicializa.
 
 	/**
-	 * Método donde iniciar estructuras de datos específicas del universo
+	 * Método donde iniciar estructuras de datos específicas del universo. Es responsabilidad de las subclases.
 	 */
 	protected abstract void initializeDataStructures();
 	
@@ -47,15 +47,7 @@ public abstract class UniverseTemplate implements UniverseInterface {
 	    this.R = console.nextDouble();
 	    this.bodies_array = new Body[N];
 	  
-	    this.load_bodies(console);
-		this.initializeDataStructures();
-
-	    console.close();
-	}
-	
-	protected void load_bodies(Scanner console) {
-		
-      for (int i = 0; i < this.N; i++) {
+	    for (int i = 0; i < this.N; i++) {
         	double px = console.nextDouble();
             double py = console.nextDouble(); 
             double vx = console.nextDouble();
@@ -68,6 +60,9 @@ public abstract class UniverseTemplate implements UniverseInterface {
             Body b =  new Body(px,py,vx,vy,massi,color);
             this.bodies_array[i] = b;
         }
+		this.initializeDataStructures();
+
+	    console.close();
 	}
 	
 	public void initialize_random(int number_bodies, double radius) {
