@@ -2,7 +2,6 @@ package nbody.console;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-
 import nbody.model.universe.*;
 
 /**
@@ -34,7 +33,7 @@ public class NBody {
 		
 	/**
 	 * Corre el programa
-	 * @param args argumentos. @see Nbody
+	 * @param args argumentos.
 	 */
 	public static void main(String[] args) {
 		
@@ -64,37 +63,37 @@ public class NBody {
 		
 		// revisamos los parametros        
 		if (args.length < 8) {
-			System.err.println("Cantidad de parÃ¡metros invÃ¡lida.");
+			System.err.println("Cantidad de parámetros inválida.");
             System.err.println(use_help);
             System.exit(1);
         }
 		
 		if (!args[0].equals("-i") && !args[0].equals("--iteraciones")) {
-            System.err.println("El parÃ¡metro -i es obligario");
+            System.err.println("El parámetro -i es obligario");
         	System.exit(1);
 		}
         try {
         	iteraciones = Integer.parseInt(args[1]);
         } catch (NumberFormatException e) {
-            System.err.println("Valor no vÃ¡lido para el parÃ¡metro -i nÃºmero de iteraciones.");
+            System.err.println("Valor no válido para el parámetro -i número de iteraciones.");
             System.err.println(use_help);
         	System.exit(1);
         }
         
 		if (!args[2].equals("-dt") && !args[2].equals("--delta")) {
-            System.err.println("El parÃ¡metro -dt es obligario");
+            System.err.println("El parámetro -dt es obligario");
         	System.exit(1);
 		}        
         try {
         	dt = Double.parseDouble(args[3]);
         } catch (NumberFormatException e) {
-            System.err.println("Valor no vÃ¡lido para el parÃ¡metro -dt delta tiempo.");
+            System.err.println("Valor no válido para el parámetro -dt delta tiempo.");
             System.err.println(use_help);
         	System.exit(1);
         }
         
         if (!args[4].equals("-a") && !args[4].equals("--algoritmo")) {
-            System.err.println("El parÃ¡metro -a es obligario");
+            System.err.println("El parámetro -a es obligario");
         	System.exit(1);
         }
         String algorithm = args[5];
@@ -108,7 +107,7 @@ public class NBody {
 	    			try {
 	    				threads = Integer.parseInt(args[9]);
 	    			} catch (NumberFormatException e) {
-	    	            System.err.println("Valor no vÃ¡lido para el parÃ¡metro -t nÃºmero de threads.");
+	    	            System.err.println("Valor no válido para el parámetro -t número de threads.");
 	    	            System.err.println(use_help);
 	    	        	System.exit(1);
 	    	        }
@@ -143,7 +142,7 @@ public class NBody {
         
     	
         if (!args[6].equals("-f") && !args[6].equals("--file") && ! args[6].equals("-n") &&  ! args[6].equals("--ncuerpos")) {
-            System.err.println("Debe incluir el parÃ¡metro -n o -f");
+            System.err.println("Debe incluir el parámetro -n o -f");
         	System.exit(1);
 		}
         if (args[6].equals("-f") || args[6].equals("-file")) {
@@ -162,7 +161,7 @@ public class NBody {
              	int N = Integer.parseInt(args[7]);
              	u.initialize_random(N, 100.0);
              } catch (NumberFormatException e) {
-                 System.err.println("Valor no vÃ¡lido para el parÃ¡metro -n numero de cuerpos.");
+                 System.err.println("Valor no válido para el parámetro -n numero de cuerpos.");
                  System.err.println(use_help);
              	System.exit(1);
              }
@@ -173,14 +172,15 @@ public class NBody {
         long startTime = System.currentTimeMillis();
     	for (int i = 0; i < iteraciones; i++) {
     		u.update(dt);
-    		System.out.printf("-- Ejecutando iteraciÃ³n %d \n", i+1);
+    		if (i % 10 == 0)
+    			System.out.printf("-- Ejecutando iteraciÃ³n %d \n", i+1);
     	}
     	u.stop(); 
 
-    	String result = "Ejecutadas %d iteraciones del algorÃ­tmo %s con un delta tiempo %f en %d milisegundos sobre un total de %d cuerpos.";
+    	String result = "Ejecutadas %d iteraciones del algorítmo %s con un delta tiempo %f en %d milisegundos sobre un total de %d cuerpos.";
     	if (parallel)
     		result += " Utilizando %d threads.";
-
+    	result += "\n";
     	long stopTime = System.currentTimeMillis();
         long elapsedTime = stopTime - startTime;
         
