@@ -25,6 +25,7 @@ import java.io.File;
 
 import javax.swing.Action;
 import javax.swing.JTextField;
+import java.awt.Toolkit;
 
 /**
  * Aplicación gráfica para la simulación, con visualización de los cuerpos y su movimiento.
@@ -109,6 +110,8 @@ public class NBodyGUI extends JFrame {
 	 * Crea el frame principal de la aplicación.
 	 */
 	public NBodyGUI() {
+		setTitle("NBodyGui");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(NBodyGUI.class.getResource("/com/sun/java/swing/plaf/windows/icons/Computer.gif")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 640);
 		this.simulation_running = false;
@@ -135,7 +138,7 @@ public class NBodyGUI extends JFrame {
 		JLabel lblNewLabel = new JLabel("DeltaT");
 		panel.add(lblNewLabel);
 		
-		delta_t_field = new JTextField("1");
+		delta_t_field = new JTextField();
 		panel.add(delta_t_field);
 		delta_t_field.setColumns(10);
 		

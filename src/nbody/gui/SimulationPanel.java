@@ -12,7 +12,6 @@ import java.awt.geom.Ellipse2D;
 import java.io.FileNotFoundException;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -20,8 +19,6 @@ import javax.swing.Timer;
 import nbody.model.Body;
 import nbody.model.universe.*;
 
-import javax.swing.JTextPane;
-import javax.swing.JTextField;
 
 /**
  * Panel donde se anima la simulación del movimiento de los N-cuerpos.
@@ -61,7 +58,7 @@ public class SimulationPanel extends JPanel {
     	//this.u = new SecuentialBruteForceUniverse();
     	//this.u = new BarnesHutUniverse();
     	//this.u = new ParallelBruteForceUniverse();
-    	this.u = new ParallelBarnesHutUniverse();
+    	this.u = new ParallelBarnesHutUniverse(Runtime.getRuntime().availableProcessors());
     	//this.u = new ParallelBalancedBarnesHutUniverse();
 		this.reset = new JButton("Reset");
 		this.reset.setVisible(false);

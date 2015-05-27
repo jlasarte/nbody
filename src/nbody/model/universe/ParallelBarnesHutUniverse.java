@@ -15,11 +15,13 @@ public class ParallelBarnesHutUniverse extends BarnesHutUniverse {
 	 */
 	UpdateBarnesHutRunnable[] t;
 	private Semaphore semaforo_update;
+	private int threads;
 	CyclicBarrier barrier;
 	CountDownLatch finishedUpdating;
 	
-	public ParallelBarnesHutUniverse() {
+	public ParallelBarnesHutUniverse(int threads) {
 		super();
+		this.threads = threads;
         Quadrant quad = new Quadrant(0, 0, this.R * 2);
         this.setBodiesTree(new IterativeBHTree(quad));
 	}
@@ -76,7 +78,7 @@ public class ParallelBarnesHutUniverse extends BarnesHutUniverse {
 	}
 	
 	protected void initializeDataStructures() {
-		this.t = new UpdateBarnesHutRunnable[Runtime.getRuntime().availableProcessors()];
+		this.t = new UpdateBarnesHutRunnable[threads];
 		
 		this.semaforo_update = new Semaphore(0, true);
 

@@ -9,7 +9,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
 
-import nbody.model.BHTree;
 import nbody.model.Body;
 import nbody.model.BodyXCoordinateComparator;
 import nbody.model.BodyYCoordinateComparator;
@@ -79,6 +78,8 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 	private int total_work;
 
 	private coordinate[] chanel_split_coord;
+
+	private int threads;
 	
 	class BodyDividerThread extends Thread {
 		
@@ -210,8 +211,9 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 	    return log + ( bits >>> 1 );
 	}
 	
-	public ParallelBalancedBarnesHutUniverse() {
+	public ParallelBalancedBarnesHutUniverse(int threads) {
 		super();
+		this.threads = threads;
         Quadrant quad = new Quadrant(0, 0, this.R * 2);
         this.setBodiesTree(new IterativeBHTree(quad));
 	}
@@ -322,7 +324,7 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 	}
 	
 	public void initializeDataStructures() {
-		processor_count = 4;
+		processor_count = this.threads;
 		this.body_divider_threads = new BodyDividerThread[processor_count];
 		this.force_updater_threads = new ForceUpdaterThread[processor_count];
 		this.start_division = new Semaphore[processor_count];

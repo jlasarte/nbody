@@ -19,6 +19,7 @@ public class ParallelBruteForceUniverse extends UniverseTemplate {
 	private Semaphore semaforo_update;
 	CyclicBarrier barrier;
 	CountDownLatch finishedUpdating;
+	private int threads;
 
 	class UpdateRunnable extends Thread {
 		
@@ -85,8 +86,13 @@ public class ParallelBruteForceUniverse extends UniverseTemplate {
 		}
 	}
 	
+	public ParallelBruteForceUniverse(int threads) {
+		super();
+		this.threads = threads;
+	}
+	
 	protected void initializeDataStructures( ){
-		this.t = new UpdateRunnable[Runtime.getRuntime().availableProcessors()];
+		this.t = new UpdateRunnable[this.threads];
 		
 		// como la barrera es ciclica, solo tenemos que iniciarla esta vez.
 		this.barrier = new CyclicBarrier(this.t.length);

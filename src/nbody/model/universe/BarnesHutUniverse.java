@@ -2,7 +2,6 @@ package nbody.model.universe;
 
 import nbody.model.BHTree;
 import nbody.model.Body;
-import nbody.model.IterativeBHTree;
 import nbody.model.Quadrant;
 
 /***
