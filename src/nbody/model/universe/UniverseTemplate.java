@@ -83,6 +83,73 @@ public abstract class UniverseTemplate implements UniverseInterface {
 		}
 		this.initializeDataStructures();
 	}
+	
+	public void initialize_random_disk(int number_bodies, double radius) {
+		this.N = number_bodies;
+		this.R = radius;
+		this.bodies_array = new Body[N];
+		this.bodies_array = this.createsPointsGaussDisk(number_bodies, 40, 1,  40, .1, 1, 0.01, 0, 0, 0, 200, 10, 76, 12, 0, 10050);
+	}
+	
+	
+	public Body[] createsPointsGaussDisk(int count,
+            double edge_size,double min_mass,double max_mass,
+            double min_radius,double max_radius,
+            double max_velocity,
+            double disk_x,double disk_y,double disk_z,
+            double disk_radius,double disk_thickness,
+            double group_vel_ang_h,double group_vel_ang_v,
+            double group_mag,double center_mult){
+			// making gaussian distribution
+		
+		Body[] giveback = new Body[count];
+		double x,y,z;
+		double mass,radius;
+		double vx=0,vy=0;
+		Random rand = new Random();
+		for (int i=1;i<count;i++){
+			// create radius
+			radius=rand.nextDouble()*(max_radius-min_radius)+min_radius;
+			// generate position and velocity...for now the the disk will
+			// remain flat on the XY plain...that may change
+			x = disk_x+rand.nextGaussian()*disk_radius;
+			y = disk_y+rand.nextGaussian()*disk_radius;
+			z = 0;
+			// create velocity
+			// create unit vector from current point to disk center and unit
+			// vector along z axis
+			double u_pc[] = {disk_x-x,disk_y-y,disk_z-z};
+			double z_axis[] = {0,0,1};
+			double vel[] = {u_pc[1]*z_axis[2]-u_pc[2]*z_axis[1],
+			                u_pc[2]*z_axis[0]-u_pc[0]*z_axis[2],
+			                u_pc[0]*z_axis[1]-u_pc[1]*z_axis[0]};
+			double dist = Math.sqrt(vel[0]*vel[0]+vel[1]*vel[1]+vel[2]*vel[2]);
+			// velocity magnitude depend on how far from center
+			double new_mag=(1-(u_pc[0]*u_pc[0]+u_pc[1]*u_pc[1]+u_pc[2]*u_pc[2])/
+			(16*disk_radius*disk_radius))*max_velocity;
+			new_mag=Math.abs(new_mag);
+			vel[0]=vel[0]/dist*new_mag;
+			vel[1]=vel[1]/dist*new_mag;
+			vel[2]=0;
+			// create mass based on how close it is to the center
+			mass = (1-(u_pc[0]*u_pc[0]+u_pc[1]*u_pc[1]+u_pc[2]*u_pc[2])/(16*disk_radius*disk_radius))*(max_mass-min_mass)+min_mass;
+			mass=Math.abs(mass);
+			// apply a group velocity component
+			vel[0]+=Math.cos(group_vel_ang_h*Math.PI/180.0)*
+			        Math.cos(group_vel_ang_v*Math.PI/180.0)*group_mag;
+			vel[1]+=Math.sin(group_vel_ang_h*Math.PI/180.0)*
+			        Math.cos(group_vel_ang_v*Math.PI/180.0)*group_mag;
+			// create the particle
+				giveback[i]=new Body(x,y,vel[0],vel[1],mass,Color.WHITE);
+			}
+			// create one last point that will act as the center of mass for
+			// the entire disk
+			mass=center_mult*max_mass;
+			mass+=min_mass;
+			giveback[0]=new Body(disk_x,disk_y,0,0,mass,Color.RED);
+			
+			return giveback;
+	}
 
 	@Override
 	public abstract void update(double dt);

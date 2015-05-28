@@ -55,10 +55,10 @@ public class SimulationPanel extends JPanel {
 	 */
     public SimulationPanel()
     {
-    	//this.u = new SecuentialBruteForceUniverse();
+    	this.u = new SecuentialBruteForceUniverse();
     	//this.u = new BarnesHutUniverse();
     	//this.u = new ParallelBruteForceUniverse();
-    	this.u = new ParallelBarnesHutUniverse(Runtime.getRuntime().availableProcessors());
+    	//this.u = new ParallelBarnesHutUniverse(Runtime.getRuntime().availableProcessors());
     	//this.u = new ParallelBalancedBarnesHutUniverse();
 		this.reset = new JButton("Reset");
 		this.reset.setVisible(false);
@@ -90,6 +90,7 @@ public class SimulationPanel extends JPanel {
     	this.selected_universe = universe;
     	try {
 			u.initialize(universe);
+			u.initialize_random_disk(1000, 500);
 	    	this.reset.setVisible(true);
 	    	this.repaint();
 		} catch (FileNotFoundException e) {
