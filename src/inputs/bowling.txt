@@ -1,16 +1,16 @@
 11
 2.5E11
-0.0 -2.4E11 0.0 5e5 -5.0E30 ball.gif
-0.0 2.1E11 0.0 0.0 5e21 pin.gif
-1E10 2.2E11 0.0 0.0 5e21 pin.gif
--1E10 2.2E11 0.0 0.0 5e21 pin.gif
-2E10 2.3E11 0.0 0.0 5e21 pin.gif
--2E10 2.3E11 0.0 0.0 5E21 pin.gif
-0.0 2.3E11 0.0 0.0 5E21 pin.gif
--3E10 2.4E11 0.0 0.0 5E21 pin.gif
-3E10 2.4E11 0.0 0.0 5e21 pin.gif
--1E10 2.4E11 0.0 0.0 5E21 pin.gif
-1E10 2.4E11 0.0 0.0 5E21 pin.gif
+0.0 -2.4E11 0.0 5e5 -5.0E30 255 255 255
+0.0 2.1E11 0.0 0.0 5e21 255 0 0
+1E10 2.2E11 0.0 0.0 5e21 255 0 0
+-1E10 2.2E11 0.0 0.0 5e21 255 0 0
+2E10 2.3E11 0.0 0.0 5e21 255 0 0
+-2E10 2.3E11 0.0 0.0 5E21 255 0 0
+0.0 2.3E11 0.0 0.0 5E21 255 0 0
+-3E10 2.4E11 0.0 0.0 5E21 255 0 0
+3E10 2.4E11 0.0 0.0 5e21 255 0 0
+-1E10 2.4E11 0.0 0.0 5E21 255 0 0
+1E10 2.4E11 0.0 0.0 5E21 255 0 0
 
 Simulates a bowling ball hitting a rack of pins, using negative
 mass for the bowling ball to make the pins fly away.

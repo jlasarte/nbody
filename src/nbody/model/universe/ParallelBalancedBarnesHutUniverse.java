@@ -132,7 +132,7 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 					if (running) {
 				
 				        this.partner = this.number ^ (binlog(processor_count) - this.chanel); // ^ = bitwise xor
-						int above = (this.number & this.chanel); // indica si este thread esta "arriba" o "debajo" de la region.
+						int above = ((this.number & 0xff) >> 7); // indica si este thread esta "arriba" o "debajo" de la region.
 						for (int i = 0; i < this.bodies.size(); i++) {
 							// si el cuerpo no esta en mi secci�n, se lo envio al buffer de mi compa�ero.
 							// no es necesario exclusion mutua para spli_coordinates ya que se setean ANTES de que el semaforo de star_division sea liberado

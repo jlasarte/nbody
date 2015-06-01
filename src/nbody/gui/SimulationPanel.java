@@ -55,11 +55,7 @@ public class SimulationPanel extends JPanel {
 	 */
     public SimulationPanel()
     {
-    	this.u = new SecuentialBruteForceUniverse();
-    	//this.u = new BarnesHutUniverse();
-    	//this.u = new ParallelBruteForceUniverse();
-    	//this.u = new ParallelBarnesHutUniverse(Runtime.getRuntime().availableProcessors());
-    	//this.u = new ParallelBalancedBarnesHutUniverse();
+    	this.u = new BarnesHutUniverse();
 		this.reset = new JButton("Reset");
 		this.reset.setVisible(false);
 		this.add(reset);
@@ -90,7 +86,6 @@ public class SimulationPanel extends JPanel {
     	this.selected_universe = universe;
     	try {
 			u.initialize(universe);
-			u.initialize_random_disk(1000, 500);
 	    	this.reset.setVisible(true);
 	    	this.repaint();
 		} catch (FileNotFoundException e) {
@@ -164,6 +159,37 @@ public class SimulationPanel extends JPanel {
      */
 	public void stop() {
 		t.stop();
+	}
+
+	public void setUniverse(String simulation) {
+		switch (simulation) {
+		case "barnes" : 
+			this.u = new BarnesHutUniverse();
+			break;
+		case "brute":
+			this.u = new SecuentialBruteForceUniverse();
+			break;
+		case "brutep":
+			this.u = new ParallelBruteForceUniverse(Runtime.getRuntime().availableProcessors());
+			break;
+		case "barnesp":
+			this.u = new ParallelBarnesHutUniverse(Runtime.getRuntime().availableProcessors());
+			break;
+		case "barnespb":
+			this.u = new ParallelBalancedBarnesHutUniverse(Runtime.getRuntime().availableProcessors());
+			break;
+		default:
+			JOptionPane.showMessageDialog(null, "Algoritmo no permitido");
+            break;
+           
+		}
+		try {
+			this.u.initialize(selected_universe);
+		} catch (FileNotFoundException e) {
+			JOptionPane.showMessageDialog(null, "Error al abrir el archivo.");
+		}
+		this.repaint();
+		
 	}
 
 }
