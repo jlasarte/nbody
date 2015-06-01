@@ -12,8 +12,8 @@ import nbody.model.Body;
 public interface UniverseInterface {
 		
 	/**
-	 * Inicializa el universo con los datos contenidos en el archivo pasado como parámetro.
-	 * El archivo deberáa tener el siguiente formato
+	 * Inicializa el universo con los datos contenidos en el archivo pasado como parametro.
+	 * El archivo deberaa tener el siguiente formato
 	 *     NumeroDeCuerpos
 	 *     Radio
 	 *     Lista de Cuerpos, uno por Línea
@@ -25,13 +25,13 @@ public interface UniverseInterface {
 	 *    0.000e00 -4.500e10 -3.000e04 0.000e00 1.989e30 255 136 0
 	 *    
 	 * Los cuerpos contienen los siguientes datos: 
-	 * - Posición en el eje X
-	 * - Posición en el eje Y
+	 * - Posicion en el eje X
+	 * - Posicion en el eje Y
 	 * - Velocidad en el eje X
 	 * - Velocidad en el eje Y
-	 * - Color expresado en tres enteros que indican R G B [Sólo usado para visualización]
+	 * - Color expresado en tres enteros que indican R G B [Solo usado para visualizacion]
 	 * @param data_file String ruta del archivo de datos a utilizar
-	 * @throws FileNotFoundException cuando el archivo pasado como parámetro no se encuentra o no se puede abrir.
+	 * @throws FileNotFoundException cuando el archivo pasado como parametro no se encuentra o no se puede abrir.
 	 */
 	public void initialize(String data_file) throws FileNotFoundException;
 	/**

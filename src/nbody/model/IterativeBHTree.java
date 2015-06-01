@@ -7,20 +7,20 @@ import java.util.Stack;
  * cuando java crea un thread, le adjudica una cierta cantidad de memoria en el stack. 
  * <p>
  * Lo que sucede entonces es que al crearse una thread, la thread principal pierde 1MB
- * (aproximadamente, depende de la configuración de cada usuario) de memoria. En general,
+ * (aproximadamente, depende de la configuracion de cada usuario) de memoria. En general,
  * esto no es un problema, pero al construir un arbol de manera recursiva con 50.000 o
- * 100000 elementos, nos encontramos con problemas de stack overflow en la construcción
- * y actualización del árbol.
+ * 100000 elementos, nos encontramos con problemas de stack overflow en la construccion
+ * y actualizacion del arbol.
  * <p>
- * Debido a que JAVA no implementa optimizaciones para tail-recursión, la opción más 
- * viable fue la implementación de una subclase iterativa de BHTree
+ * Debido a que JAVA no implementa optimizaciones para tail-recursion, la opcion mas 
+ * viable fue la implementacion de una subclase iterativa de BHTree
  * 
  * @author julia
  *
  */
 public class IterativeBHTree extends BHTree {
 	/**
-	 * Guarda el estado actual de la iteración.
+	 * Guarda el estado actual de la iteracion.
 	 * @author julia
 	 *
 	 */
@@ -76,10 +76,10 @@ public class IterativeBHTree extends BHTree {
 	}
 	
 	/**
-	 * Retorna una snapshot para la inserción de un cuerpo
+	 * Retorna una snapshot para la insercion de un cuerpo
 	 * @param b el cuerpo a insertar
 	 * @param thisbh "this" BHTree, simula el arbol que recibiría la llamada recursiva
-	 * @return la snapshot para la isnerción de un cuerpo.
+	 * @return la snapshot para la isnercion de un cuerpo.
 	 */
 	private SnapShot putBody(Body b, BHTree thisbh) {
         SnapShot s = new SnapShot();
@@ -97,6 +97,9 @@ public class IterativeBHTree extends BHTree {
 	}
 	
 
+	/**
+	 * Actualiza la fuerza de manera iterativa
+	 */
     public void updateForce(Body b) {
     	
     	b.incWork();

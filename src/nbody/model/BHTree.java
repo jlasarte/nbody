@@ -4,7 +4,7 @@ package nbody.model;
 /**
  * BHTree.java
  * 
- * Representa un quadtree para el algorítmo de Barnes y Hut
+ * Representa un quadtree para el algoritmo de Barnes y Hut
  *
  *
  * @author jlasarte
@@ -12,8 +12,8 @@ package nbody.model;
 public class BHTree {
 
 	/**
-	 * parámetro frontera utilizado para decidir si un cuerpo esta lo suficientemente lejos de otro y así aproximar el calculo utilizando su nodo padre.
-	 * Thetas mayores generan mayor presición, pero disminuyen la velocidad. Sí Theta = 0 el algoritmo degenera a una versión secuencial.
+	 * parametro frontera utilizado para decidir si un cuerpo esta lo suficientemente lejos de otro y asi aproximar el calculo utilizando su nodo padre.
+	 * Thetas mayores generan mayor presicion, pero disminuyen la velocidad. Si Theta = 0 el algoritmo degenera a una version secuencial.
 	 */
 	protected final double Theta = 0.5;
 	/**
@@ -43,7 +43,7 @@ public class BHTree {
   
     /**
      * Constructor. Crea un nuevo BTree vacio.
-     * @param q el cuadrante dentro del que este árbol esta contenido.
+     * @param q el cuadrante dentro del que este arbol esta contenido.
      */
     public BHTree(Quadrant q) {
         this.quad = q;
@@ -56,14 +56,14 @@ public class BHTree {
  
 
     /**
-     * Inserta recursivamente un nuevo cuerpo al árbol
+     * Inserta recursivamente un nuevo cuerpo al arbol
      * @param b cuerpo a insertar. Al insertar el cuerpo se resetea el trabajo asociado al calculo de fuerzas utlizado en ORB. 
      * @see Body 
      * @see ParallelBalancesBarnesHutUniverse
      */
     public void insert(Body b) {
     	
-    	// si el nodo esta vacío insertamos el nodo.
+    	// si el nodo esta vacio insertamos el nodo.
         if (body == null) {
         	b.resetWork(); // reseteamos el trabajo de un cuerpo.
             body = b;
@@ -71,7 +71,7 @@ public class BHTree {
         }
   
         if (! isExternal()) {
-        	// si no es hoja, además de insertar el nodo tenemos que actualizar el centro de gravedad y la masa.
+        	// si no es hoja, ademas de insertar el nodo tenemos que actualizar el centro de gravedad y la masa.
         	body = body.plus(b);
         	// insertamos el nodo en el cuadrante que corresponda
             putBody(b);
@@ -144,7 +144,7 @@ public class BHTree {
 
             // comparamos s/d con el parametro frontera 
             if ((s / d) < Theta)
-            	// el grupo de cuerpos representado por este nodo está lo suficientemente lejos como para poder aproximarlo como un único cuerpo.
+            	// el grupo de cuerpos representado por este nodo esta lo suficientemente lejos como para poder aproximarlo como un único cuerpo.
                 b.addForce(body);
             
             // sino esta lo suficientemente lejos tenemos que actualizar con cada uno de sus hijos.

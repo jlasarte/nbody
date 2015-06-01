@@ -8,7 +8,12 @@ import nbody.model.BHTree;
 import nbody.model.Body;
 import nbody.model.IterativeBHTree;
 import nbody.model.Quadrant;
-//TODO: revisar hay dos que se quedan quietos!!
+
+/**
+ * Universo que se ejecuta utilizando un algoritmo de barnes-hut paralelo
+ * @author jlasarte
+ *
+ */
 public class ParallelBarnesHutUniverse extends BarnesHutUniverse {
 	/**
 	 * arreglo de threads
@@ -18,7 +23,12 @@ public class ParallelBarnesHutUniverse extends BarnesHutUniverse {
 	private int threads;
 	CyclicBarrier barrier;
 	CountDownLatch finishedUpdating;
-	
+	private double current_dt;
+
+	/**
+	 * Constructor
+	 * @param threads cantidad de threads a utilizar
+	 */
 	public ParallelBarnesHutUniverse(int threads) {
 		super();
 		this.threads = threads;
@@ -26,12 +36,22 @@ public class ParallelBarnesHutUniverse extends BarnesHutUniverse {
         this.setBodiesTree(new IterativeBHTree(quad));
 	}
 	
+	/**
+	 * thread encargada de la actualizacion de cuerpos
+	 * @author jlasarte
+	 *
+	 */
 	class UpdateBarnesHutRunnable extends Thread {
 		
 		private volatile boolean running = true;
 		private int start;
 		private int stop;
 		
+		/**
+		 * Constructor
+		 * @param i indice de esta thread
+		 * @param cores cantidad de threads total
+		 */
 		UpdateBarnesHutRunnable(int i, int cores) { 
         	int n = N / cores;
 	        this.start = i * n;
@@ -43,6 +63,9 @@ public class ParallelBarnesHutUniverse extends BarnesHutUniverse {
         	
         }
 	    
+		/**
+		 * Detiene la thread
+		 */
 	    public void terminate() {
 	    	running = false;
 	    }
@@ -54,16 +77,16 @@ public class ParallelBarnesHutUniverse extends BarnesHutUniverse {
 				try {
 					semaforo_update.acquire();
 				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					System.err.println("Proceso interrumpido");
+					System.exit(1);
 				}
 				
 				if (running) {
 					
-					double dt = 0.5;
+					double dt = current_dt;
 
 			        	
-			        for (int i = this.start+1; i < this.stop; i++) {
+			        for (int i = this.start; i < this.stop; i++) {
 			          	// reset forces to zero 
 	
 			           	bodies_array[i].resetForce();	                
@@ -77,6 +100,9 @@ public class ParallelBarnesHutUniverse extends BarnesHutUniverse {
 		}
 	}
 	
+	/**
+	 * Inicializa estructuras de datos
+	 */
 	protected void initializeDataStructures() {
 		this.t = new UpdateBarnesHutRunnable[threads];
 		
@@ -92,6 +118,7 @@ public class ParallelBarnesHutUniverse extends BarnesHutUniverse {
 	public void update(double dt) {
         Quadrant quad = new Quadrant(0, 0, this.R * 2);
         this.setBodiesTree(new BHTree(quad));
+        this.current_dt = dt;
         for (Body b : this.bodies_array) {
         	if (quad.contains(b.rx(), b.ry())) {
         		this.bodies_tree().insert(b);
@@ -108,8 +135,8 @@ public class ParallelBarnesHutUniverse extends BarnesHutUniverse {
 	      try {
 			this.finishedUpdating.await();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Proceso interrumpido");
+			System.exit(1);
 		} 
 
 	}

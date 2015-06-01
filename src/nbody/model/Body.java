@@ -18,15 +18,15 @@ public class Body {
     private static final double G = 6.67e-11;
     
     /**
-     * Trabajo asociado con la actualización de fuerza de este cuerpo. Utilizado para el balanceo de carga.
+     * Trabajo asociado con la actualizacion de fuerza de este cuerpo. Utilizado para el balanceo de carga.
      */
     private int work;
     /**
-     * Posición en el eje X 
+     * Posicion en el eje X 
      */
     private double rx;
     /**
-     * Posición en el eje Y
+     * Posicion en el eje Y
      */
     private double ry;
     /**
@@ -50,7 +50,7 @@ public class Body {
      */
     private double mass;
     /**
-     * Color del cuerpo, utilizado para la visualización.
+     * Color del cuerpo, utilizado para la visualizacion.
      */
     private Color color;
 
@@ -76,7 +76,7 @@ public class Body {
 
     /**
      * Acutaliza la velocidad y posicion del cuerpo con un paso dt
-     * @param dt el delta tiempo para esta simulación.
+     * @param dt el delta tiempo para esta simulacion.
      */
     public void update(double dt) {
         vx += dt * fx / mass;
@@ -161,30 +161,60 @@ public class Body {
         return new Body(x, y, a.vx, b.vx, m, a.color());
     }
 
+    /**
+     * Devuelve el color del cuerpo
+     * @return color del cuerpo
+     */
 	public Color color() {
 		return color;
 	}
-
+	
+	/**
+	 * Setea el color del cuerpo
+	 * @param color color a setear para el cuerpo
+	 */
 	public void setColor(Color color) {
 		this.color = color;
 	}
 
+	/**
+	 * Posicion en x del cuerpo
+	 * @return x del cuerpo
+	 */
 	public double rx() {
 		return rx;
 	}
-
+	
+	/**
+	 * Setea la posicion x del cuerpo
+	 * @param rx posicion a setear
+	 */
 	public void setRx(double rx) {
 		this.rx = rx;
 	}
-
+	/**
+	 * Posicion en y del cuerpo
+	 * @return y del cuerpo
+	 */
 	public double ry() {
 		return ry;
 	}
-
+	
+	/**
+	 * Setea la posicion y del cuerpo
+	 * @param ry posicion a setear
+	 */
 	public void setRy(double ry) {
 		this.ry = ry;
 	}
 
+	/**
+	 * Indica si esta este cuerpo en direccion arriba o abajo de una coordenada.
+	 * @param above esta arriba o abajo?
+	 * @param spc coordenada de corte
+	 * @param q cuantre
+	 * @return verdadero si el cuerpo se encuentra en direccion above de la coordenada de corte.
+	 */
 	public boolean inDirection(int above, coordinate spc, nbody.model.universe.ParallelBalancedBarnesHutUniverse.quadrant q) {
 		double lenghtx = - q.xmin + q.xmax; // -xmin + xmax
 		double lenghty = - q.ymin + q.ymax; // -ymin + ymax
@@ -202,9 +232,9 @@ public class Body {
 	}
 	
 	/**
-	 * Devuelve el trabajo asociado con la actualización de fuerza de este cuerpo.
+	 * Devuelve el trabajo asociado con la actualizacion de fuerza de este cuerpo.
 	 * Utilizado por el algorítmo de ORB en ParallelBalancedBarnesHutUniverse
-	 * @return trabajo asociado con la actualización de este cuerpo.
+	 * @return trabajo asociado con la actualizacion de este cuerpo.
 	 */
 	public int work() {
 		return this.work;

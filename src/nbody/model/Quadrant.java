@@ -1,13 +1,10 @@
 package nbody.model;
 
-/** 
- * Quadrant.java
- *
- * Represents quadrants for the Barnes-Hut algorithm. 
- *
+/**
+ * Cuadrante para el algoritmo de Banres-Hut
+ * @author jlasarte
  *
  */
-
 public class Quadrant {
     
     private double xmid;
@@ -15,12 +12,11 @@ public class Quadrant {
     private double length;   
  
     /**
-     * Constructor: creates a new Quad with the given 
-     * parameters (assume it is square).
+     * Constructor: Crea un nuevo cuadrante
      *
-     * @param xmid   x-coordinate of center of quadrant
-     * @param ymid   y-coordinate of center of quadrant
-     * @param length the side length of the quadrant
+     * @param xmid   centro x del cuadrante
+     * @param ymid   centro y del cuadrante
+     * @param longuitud del cuadrante
      */
     public Quadrant(double xmid, double ymid, double length) {
         this.setXmid(xmid);
@@ -29,20 +25,20 @@ public class Quadrant {
     }
 
     /**
-     * Returns the length of one side of the square quadrant.
+     * Retorna la longitud del cuadrante
      *
-     * @return side length of the quadrant
+     * @return longitud del cuadrante
      */
     public double length() {
         return getLength();
     }
 
     /**
-     * Does this quadrant contain (x, y)?
+     * Retorna si esta cuadrante contiene una posicion (x,y)
      *
-     * @param x x-coordinate of point to test
-     * @param y y-coordinate of point to test
-     * @return  true if quadrant contains (x, y), else false
+     * @param x coordenada x a testear
+     * @param y coordenada y a testear
+     * @return  verdaderi si el cuadrante contiene a (x,y)
      */
     public boolean contains(double x, double y) {
         double halfLen = this.getLength() / 2.0;
@@ -53,9 +49,9 @@ public class Quadrant {
     }
 
     /**
-     * Returns a new object that represents the northwest quadrant.
+     * Cuadrante NW de este cuadrante
      *
-     * @return the northwest quadrant of this Quad
+     * @return retorna el cuadrante NW de este cuadrante
      */
     public Quadrant NW() {
         double x = this.getXmid() - this.getLength() / 4.0;
@@ -66,9 +62,9 @@ public class Quadrant {
     }
 
     /**
-     * Returns a new object that represents the northeast quadrant.
+     * Cuadrante NE de este cuadrante
      *
-     * @return the northeast quadrant of this Quad
+     * @return retorna el cuadrante NE de este cuadrante
      */
     public Quadrant NE() {
         double x = this.getXmid() + this.getLength() / 4.0;
@@ -79,9 +75,9 @@ public class Quadrant {
     }
 
     /**
-     * Returns a new object that represents the southwest quadrant.
+     * Cuadrante SW  de este cuadrante
      *
-     * @return the southwest quadrant of this Quad
+     * @return retorna el cuadrante SW de este cuadrante
      */
     public Quadrant SW() {
         double x = this.getXmid() - this.getLength() / 4.0;
@@ -92,9 +88,9 @@ public class Quadrant {
     }
 
     /**
-     * Returns a new object that represents the southeast quadrant.
+     * Cuadrante SE de este cuadrante
      *
-     * @return the southeast quadrant of this Quad
+     * @return retorna el cuadrante SE de este cuadrante
      */
     public Quadrant SE() {
         double x = this.getXmid() + this.getLength() / 4.0;
@@ -104,26 +100,47 @@ public class Quadrant {
         return SE;
     }
 
+    /**
+     * Retorna el punto medio del cuadrante en x
+     * @return el punto medio del cuadrante en x
+     */
 	public double getXmid() {
 		return xmid;
 	}
-
+    /**
+     * Setea el punto medio del cuadrante en x
+     * @return el punto medio del cuadrante en x a utilizar
+     */
 	public void setXmid(double xmid) {
 		this.xmid = xmid;
 	}
 
+    /**
+     * Retorna el punto medio del cuadrante en y
+     * @return el punto medio del cuadrante en y
+     */
 	public double getYmid() {
 		return ymid;
 	}
-
+    /**
+     * Setea el punto medio del cuadrante en y
+     * @return el punto medio del cuadrante en y a utilizar
+     */
 	public void setYmid(double ymid) {
 		this.ymid = ymid;
 	}
 
+	/**
+	 * Devuelve la longuitud del cuadrante
+	 * @return longitud del cuadrante.
+	 */
 	public double getLength() {
 		return length;
 	}
-
+	/**
+	 * Setea la longuitud del cuadrante
+	 * @return longitud del cuadrante a utilizar.
+	 */
 	public void setLength(double length) {
 		this.length = length;
 	}

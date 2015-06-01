@@ -1,14 +1,17 @@
 package nbody.model.universe;
 
 
-
+/**
+ * Universo que se actualiza utilizando el algoritmo PP, de orden O(n^2)
+ * @author jlasarte
+ *
+ */
 public class SecuentialBruteForceUniverse extends UniverseTemplate {
 
 	@Override
 	public void update(double dt) {
-        // calculate the net force exerted by body j on body i
+        // calcula las fuerzas
         for (int i = 0; i < this.N; i++) {
-        	// reset forces to zero 
 
         	bodies_array[i].resetForce();
 
@@ -19,7 +22,7 @@ public class SecuentialBruteForceUniverse extends UniverseTemplate {
                 }
             } 
         }        
-        // calculate the new acceleration, velocity, and position for each body
+        // calcular aceleracion y posicion
         for (int i = 0; i < this.N; i++) {
         	bodies_array[i].update(dt);
         }
@@ -27,10 +30,10 @@ public class SecuentialBruteForceUniverse extends UniverseTemplate {
 
 	@Override
 	public void stop() {
-		// nothing to do
+		// nada que hacer
 	}
 	
 	protected void initializeDataStructures() {
-		//nothing to do
+		//nada que hhacer
 	}
 }

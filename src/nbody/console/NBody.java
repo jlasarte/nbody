@@ -11,7 +11,7 @@ import nbody.model.universe.*;
  *  Argumentos
  *  <ul>
  * 		<li>-i,--iteraciones=N: El algortimo se ejecuta durante <b>N</b> iteraciones. </li>
- * 		<li>-dt,--delta=DELTA: El algoritmo se ejecuta utilizando <b>DELTA</b> como parámetro para los pasos de la simulación. </li>
+ * 		<li>-dt,--delta=DELTA: El algoritmo se ejecuta utilizando <b>DELTA</b> como parametro para los pasos de la simulacion. </li>
  *		<li>-a,--algoritmo=ALGORITMO: El programa se ejecuta utilizando el <b>ALGORITMO</b> seleccionado. El algoritmo puede ser una de las siguientes opciones: 
  *			<ul>
  *				<li>brute: algoritmo de fuerza bruta particula a particula</li>
@@ -20,7 +20,7 @@ import nbody.model.universe.*;
  *				<li>barnesp: algoritimo de Barnes y Hut paralelizado</li>
  *				<li>barnespb: algoritmo de Barnes y Hut paralelizado y utlizando balanceo de carga por ORB.</li>
  *		</li>
- *		<li>-f,--file=ARCHIVO: El <b>ARCHIVO</b> de donde cargar los datos de los cuerpos. Se incluyen algunos archivos de ejemplo en el código fuente de este programa.</li>
+ *		<li>-f,--file=ARCHIVO: El <b>ARCHIVO</b> de donde cargar los datos de los cuerpos. Se incluyen algunos archivos de ejemplo en el codigo fuente de este programa.</li>
  *		<li>-n,--ncuerpos=N: El algoritmo se corre con <b>N</b> cantidad de cuerpos random.</li>
  *	</ul>
  * 
@@ -46,16 +46,16 @@ public class NBody {
 			String help = "Mini programita de consola para probar los diferentes algoritmos. \n";
 			help += "Argumentos \n";
 			help += "\t -i,--iteraciones=N: El algortimo se ejecuta durante N iteraciones. \n";
-			help += "\t -dt,--delta=DELTA: El algoritmo se ejecuta utilizando DELTA como parámetro para los pasos de la simulación.  \n";
+			help += "\t -dt,--delta=DELTA: El algoritmo se ejecuta utilizando DELTA como parametro para los pasos de la simulacion.  \n";
 			help += "\t -a,--algoritmo=ALGORITMO: El programa se ejecuta utilizando el ALGORITMO seleccionado. El algoritmo puede ser una de las siguientes opciones: \n";
 			help += "\t\t brute: algoritmo de fuerza bruta particula a particula \n";
 			help += "\t\t brutep: algoritmo de fuerza bruta paralelizado \n";
 			help += "\t\t barnes: algoritmo de Barnes y Hut \n";
 			help += "\t\t barnesp: algoritimo de Barnes y Hut paralelizado \n";
 			help += "\t\t barnespb: algoritmo de Barnes y Hut paralelizado y utlizando balanceo de carga por ORB. \n";
-			help += "\t -f,--file=ARCHIVO: El ARCHIVO de donde cargar los datos de los cuerpos. Se incluyen algunos archivos de ejemplo en el código fuente de este programa. \n";
+			help += "\t -f,--file=ARCHIVO: El ARCHIVO de donde cargar los datos de los cuerpos. Se incluyen algunos archivos de ejemplo en el codigo fuente de este programa. \n";
 			help += "\t -n,--ncuerpos=N: El algoritmo se corre con N cantidad de cuerpos random. \n";
-			help += "\t -t,--threads: En caso de utilizarse un algorítmo paralelizado, indica el número de threads a utilizar. El default es el número de núcleos devuelto por la información del sistema.";
+			help += "\t -t,--threads: En caso de utilizarse un algoritmo paralelizado, indica el numero de threads a utilizar. El default es el numero de nucleos devuelto por la informacion del sistema.";
 			help += "\t -help: Imprime esta ayuda";
 			System.out.println(help);
 	        System.exit(0);
@@ -148,8 +148,7 @@ public class NBody {
         if (args[6].equals("-f") || args[6].equals("-file")) {
         	
         	String data_file_path = args[7];
-    		String workingDir = System.getProperty("user.dir");
-    		File data_file = new File(workingDir+"/src/inputs/"+data_file_path);
+    		File data_file = new File(data_file_path);
     		try {
     			u.initialize(data_file.getAbsolutePath());
     		} catch (FileNotFoundException e) {
@@ -173,7 +172,7 @@ public class NBody {
     	for (int i = 0; i < iteraciones; i++) {
     		u.update(dt);
     		if (i % 10 == 0)
-    			System.out.printf("-- Ejecutando iteración %d \n", i+1);
+    			System.out.printf("-- Ejecutando iteracion %d \n", i+1);
     	}
     	u.stop(); 
 

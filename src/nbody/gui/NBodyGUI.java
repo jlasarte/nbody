@@ -32,13 +32,13 @@ import javax.swing.JTextField;
 import java.awt.Toolkit;
 
 /**
- * Aplicación gráfica para la simulación, con visualización de los cuerpos y su movimiento.
+ * Aplicacion grafica para la simulacion, con visualizacion de los cuerpos y su movimiento.
  * @author julia
  */
 public class NBodyGUI extends JFrame {
 	
 	/**
-	 * variable para seialización.
+	 * variable para seializacion.
 	 */
 	private static final long serialVersionUID = 5439677820771990289L;
 	/**
@@ -46,15 +46,15 @@ public class NBodyGUI extends JFrame {
 	 */
 	private JPanel contentPane;
 	/**
-	 * Panel que contiene la simulación.
+	 * Panel que contiene la simulacion.
 	 */
 	private SimulationPanel simulationPanel;
 	/**
-	 * Variable para indicar si actualmente se esta corriendo la simulación.
+	 * Variable para indicar si actualmente se esta corriendo la simulacion.
 	 */
 	private boolean simulation_running;
 	/**
-	 * Acción que se ejecuta cuando el usuario habre un archivo.
+	 * Accion que se ejecuta cuando el usuario habre un archivo.
 	 */
 	private final Action action = new SwingAction("Abrir Archivo");
 	
@@ -76,7 +76,7 @@ public class NBodyGUI extends JFrame {
     private JTextField delta_t_field;
 	
     /**
-	 * Inicia la aplicación.
+	 * Inicia la aplicacion.
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -92,7 +92,7 @@ public class NBodyGUI extends JFrame {
 	}
 	
 	/**
-	 * Construye el menu de la aplicación.
+	 * Construye el menu de la aplicacion.
 	 */
 	private void buildMenu() {
 
@@ -194,7 +194,7 @@ public class NBodyGUI extends JFrame {
 	}
 
 	/**
-	 * Crea el frame principal de la aplicación.
+	 * Crea el frame principal de la aplicacion.
 	 */
 	public NBodyGUI() {
 		setTitle("NBodyGui");
@@ -271,7 +271,7 @@ public class NBodyGUI extends JFrame {
 	}
 	
 	/**
-	 * Acción ejecutada cuando se selecciona en el menu "abrir archivo".
+	 * Accion ejecutada cuando se selecciona en el menu "abrir archivo".
 	 *
 	 */
 	private class SwingAction extends AbstractAction {
@@ -279,14 +279,14 @@ public class NBodyGUI extends JFrame {
 		private static final long serialVersionUID = 6888240617193674700L;
 		/**
 		 * Constructor
-		 * @param title  El titulo de la acción.
+		 * @param title  El titulo de la accion.
 		 */
 		public SwingAction(String title) {
 			putValue(NAME, "Abrir Archivo");
 			putValue(SHORT_DESCRIPTION, "Some short description");
 		}
 		/**
-		 * Evento que se ejecuta cuando la acción ocurre.
+		 * Evento que se ejecuta cuando la accion ocurre.
 		 * @param e evento.
 		 */
 		public void actionPerformed(ActionEvent e) {

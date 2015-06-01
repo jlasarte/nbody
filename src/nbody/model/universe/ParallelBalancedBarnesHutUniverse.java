@@ -15,8 +15,18 @@ import nbody.model.BodyYCoordinateComparator;
 import nbody.model.IterativeBHTree;
 import nbody.model.Quadrant;
 
+/**
+ * Universo que se actualiza utilizando un algortimo de Barnes-Hut paralelo con  balanceo de carga por ORB
+ * @author jlasarte
+ *
+ */
 public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 	
+	/**
+	 * Clase interna cuadrante, m·s liviana que la usada para el arbol, solo para la division.
+	 * @author jlasarte
+	 *
+	 */
 	public class quadrant {
 		public quadrant(double xmin, double xmax, double ymin, double ymax) {
 			this.xmin = xmin;
@@ -33,6 +43,11 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 		public double ymax;
 	}
 	
+	/**
+	 * Coordenada.
+	 * @author jlasarte
+	 *
+	 */
 	public class coordinate {
 		public double x;
 		public double y;
@@ -55,13 +70,12 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 	private Semaphore[]  mutex_body_buffers;
 	private List<List<Body>> body_buffers;
 	
-	// es necesatio???
 	private Semaphore[] mutex_chanels;
 	private int[] chanels;
 	
 	private quadrant[] chanel_quadrant; // quadrant for each channel;
 	
-	// para esperar que los procesos terminen en cada divisi√≥n
+	// para esperar que los procesos terminen en cada division
 	private Semaphore[] finished_interchange;
 
 	// semaforos, barreras y datos para la actualizacion de fuerzas
@@ -75,12 +89,15 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 
 	public double current_dt;
 
-	private int total_work;
-
 	private coordinate[] chanel_split_coord;
 
 	private int threads;
 	
+	/**
+	 * Thread encargada de la division de cuerpos entre threads.
+	 * @author jlasarte
+	 *
+	 */
 	class BodyDividerThread extends Thread {
 		
 		private int number;
@@ -112,6 +129,9 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 			}		
 		}
 		
+		/**
+		 * Detiene la simulacion
+		 */
 	    public void terminate() {
 	    	running = false;
 	    }
@@ -154,25 +174,37 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 						finished_interchange[this.chanel].release();
 					}
 				} catch (InterruptedException | BrokenBarrierException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.err.println("Proceso interrumpido");
+					System.exit(1);
 				}
 				
 
 			}
 		}
 	}
-		
+	
+	/**
+	 * Thread encargada de la actualizacion de cuerpos.
+	 * @author jlasarte
+	 *
+	 */
 	class ForceUpdaterThread extends Thread {
 		private List<Body> bodies;
 		private volatile boolean running = true;
 		private int i;
 		
+		/**
+		 * Constructor
+		 * @param i Numero que identifica la thread
+		 */
 		public ForceUpdaterThread(int i) {
 			this.i = i;
 			this.setName("Force Updater Thread "+i);
 		}
 		
+		/**
+		 * Detiene la thread
+		 */
 		public void terminate() {
 			running = false;
 		}
@@ -183,7 +215,6 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 					start_force_updating[i].acquire();
 					this.bodies = bodies_for_threads.get(i);
 					if (running) {
-						// TODO: update with field;
 						double dt = current_dt;
 						
 				        for (Body b : this.bodies) {
@@ -194,14 +225,19 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 			        force_updating_finished.countDown();
 					}
 				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					System.err.println("Proceso interrumpido");
+					System.exit(1);
 				}
 			}
 		}
 	}
 	
-	public static int binlog( int bits ) // returns 0 for bits=0
+	/**
+	 * Logartimo en base dos
+	 * @param bits numero al cual calcularle el logaritmo
+	 * @return log2 del numero de entrada
+	 */
+	public static int binlog( int bits )
 	{
 	    int log = 0;
 	    if( ( bits & 0xffff0000 ) != 0 ) { bits >>>= 16; log = 16; }
@@ -211,6 +247,10 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 	    return log + ( bits >>> 1 );
 	}
 	
+	/**
+	 * Constructor
+	 * @param threads
+	 */
 	public ParallelBalancedBarnesHutUniverse(int threads) {
 		super();
 		this.threads = threads;
@@ -218,6 +258,17 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
         this.setBodiesTree(new IterativeBHTree(quad));
 	}
 	
+	/**
+	 * Elige la cordenada a corrtar.
+	 * 
+	 * Este metodo es probablemente el culpable de la menor eficencia de ORB. Existen mejores
+	 * algoritmos de busqueda de Media en arreglos, pero no tuve tiempo de implementarlos.
+	 * Queda para una nueva version.
+	 * @param parallel_to_x cortamos paralelo al eje x o y?
+	 * @param start donde comienza el arreglo a "cortar"
+	 * @param end donde termina el arreglo a cortar"
+	 * @return coordenada de corte.
+	 */
 	private coordinate chooseCoordinateToSplit(boolean parallel_to_x, int start, int end) {
 		coordinate coord = new coordinate();
 		Comparator<Body> c;
@@ -227,21 +278,40 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 		} else {
 			c = new BodyYCoordinateComparator();
 		}
-		java.util.Arrays.parallelSort(bodies_array,c);
+		 int total_work_this = 0;
+	
+		
+		Body[] array_copy = new Body[end-start+1];
+		
+		System.arraycopy(bodies_array, 0, array_copy, 0, array_copy.length);
+		
+		// tiene que haber una manera mas inteligente de hacer esto...
+		for (Body b: array_copy ){
+			total_work_this += b.work(); 
+		}
+		java.util.Arrays.parallelSort(array_copy,c);
 		boolean found_median = false;
+		
 		int i = 0;
 		int work = 0; 
 		while(!found_median) {
-			work += bodies_array[i].work();
-			if (work > total_work/2) {
+			work += array_copy[i].work();
+			if (work > total_work_this/2) {
 				found_median = true;
-				coord.x = bodies_array[i].rx();
-				coord.y = bodies_array[i].ry();
+				coord.x = array_copy[i].rx();
+				coord.y = array_copy[i].ry();
 			} 
 		}
 		 return coord;
 	}
 	
+	/**
+	 * Corta el cuadrante en la cordenada elegida
+	 * @param q cuadrante a cortar
+	 * @param above el cuadrante nuevo esta "arriba" o "abajo" de la coordenada ?
+	 * @param coord coordenada de corte
+	 * @return nuevo cuadrante.
+	 */
 	private quadrant splitQuadrant(quadrant q, boolean above,coordinate coord) {
 		quadrant new_q = new quadrant();
 		double lenghtx = - q.xmin + q.xmax; // -xmin + xmax
@@ -274,9 +344,16 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 		return new_q;
 	}
 	
+	/**
+	 * Metodo ORB
+	 * @param chanel canal de esta iteracion
+	 * @param start comienzo de la seccion de cuerpos que controla esta iteracion
+	 * @param end fin de la secciond e cuerpos que controla esta iteracion
+	 * @param q cuadrante de esta iteracion
+	 * @param rank rango de la iteracion.
+	 */
 	public void ORB(int chanel, int start, int end, quadrant q, int rank) {
-		// TODO: revisar cuenta CASO INPAAAARRR
-		// mientras tenga m√°s de un thread en mi grupo.
+		// mientras tenga m·s de un thread en mi grupo.
 		if (chanel < binlog(processor_count) ) {
 			
 			int mid_thread = (int) Math.ceil(((double)start + (double)end)/2);
@@ -306,7 +383,6 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 				finished_interchange[chanel].acquire();
 				
 				boolean above = chanel % 2 == 1;
-				// TODO: se puede hacer algo menos goma
 				q = above ? above_quadrant : below_quadrant;
 				quadrant other = above ? below_quadrant : above_quadrant;
 				
@@ -317,12 +393,15 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 				}
 			
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.println("Proceso interrumpido");
+				System.exit(1);
 			}
 		}
 	}
 	
+	/**
+	 * Inicializa estructuras de datos.
+	 */
 	public void initializeDataStructures() {
 		processor_count = this.threads;
 		this.body_divider_threads = new BodyDividerThread[processor_count];
@@ -361,8 +440,10 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 	}
 	
 
+	/**
+	 * Resetea los cuerpos de las threads de divison de cuerpos.
+	 */
 	private void resetBodyListInDividerThreads() {
-		this.total_work = 0;
 		for (int i = 0; i < processor_count ; i++) {
 			List<Body> bodies = new ArrayList<Body>();
 			int n = N / processor_count;
@@ -378,7 +459,6 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 	        // no es necesario usar exclusion mutua para los cuerpos ya que las regiones no
 	        // tienen overlaping
 			for (int j = start_index; j < end_index; j++) {
-				this.total_work += bodies_array[j].work();
 				bodies.add(bodies_array[j]);
 			}
 			
@@ -415,7 +495,7 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 			this.force_updating_finished = new CountDownLatch(processor_count);
 			
 			for (int i=0; i < processor_count; i++) {
-				// TODO: revisar sincronizaci√≥n: creo que todoas las treads estan esperando panchas por sus canales.
+				// todas las treads estan esperando panchas por sus canales.
 				bodies_for_threads.set(i, body_divider_threads[i].bodies );
 				this.start_force_updating[i].release();
 			}
@@ -427,8 +507,8 @@ public class ParallelBalancedBarnesHutUniverse extends BarnesHutUniverse {
 			
 						
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Proceso interrumpido");
+			System.exit(1);
 		}
 	}
 

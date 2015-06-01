@@ -6,7 +6,7 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
 
 /**
- * Simulaci�n utilizando un alogritmo de fuerza bruta O(n²) paraelizado.
+ * Simulacion utilizando un alogritmo de fuerza bruta O(n^2) paraelizado.
  * @author julia
  *
  */
@@ -20,13 +20,24 @@ public class ParallelBruteForceUniverse extends UniverseTemplate {
 	CyclicBarrier barrier;
 	CountDownLatch finishedUpdating;
 	private int threads;
-
+	private double current_dt;
+	
+	/**
+	 * Thread encargada de la actualizacion de cuerpos
+	 * @author jlasarte
+	 *
+	 */
 	class UpdateRunnable extends Thread {
 		
 		private volatile boolean running = true;
 		private int start;
 		private int stop;
 		
+		/**
+		 * Constructor
+		 * @param i indice de esta thread
+		 * @param cores cantidad de threads total
+		 */
 	    UpdateRunnable(int i, int cores) { 
         	int n = N / cores;
 	        this.start = i * n;
@@ -38,6 +49,9 @@ public class ParallelBruteForceUniverse extends UniverseTemplate {
         	
         }
 	    
+	    /**
+	     * Detiene la thread
+	     */
 	    public void terminate() {
 	    	running = false;
 	    }
@@ -49,16 +63,16 @@ public class ParallelBruteForceUniverse extends UniverseTemplate {
 				try {
 					semaforo_update.acquire();
 				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					System.err.println("Proceso interrumpido");
+					System.exit(1);
 				}
 				
 				if (running) {
 					
-					double dt = 0.5;
+					double dt = current_dt;
 
 			        	
-			        for (int i = this.start+1; i < this.stop; i++) {
+			        for (int i = this.start; i < this.stop; i++) {
 			          	// reset forces to zero 
 	
 			           	bodies_array[i].resetForce();	                
@@ -72,8 +86,8 @@ public class ParallelBruteForceUniverse extends UniverseTemplate {
 			        try {
 						barrier.await();
 					} catch (InterruptedException | BrokenBarrierException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.err.println("Proceso interrumpido o en estado incorrecto.");
+						System.exit(1);
 					}
 			        
 			        for (int i =start; i < stop; i++) {
@@ -86,11 +100,18 @@ public class ParallelBruteForceUniverse extends UniverseTemplate {
 		}
 	}
 	
+	/**
+	 * Constructor
+	 * @param threads cantidad de threads a utilizar
+	 */
 	public ParallelBruteForceUniverse(int threads) {
 		super();
 		this.threads = threads;
 	}
 	
+	/**
+	 * Inicializa estructuras de datos
+	 */
 	protected void initializeDataStructures( ){
 		this.t = new UpdateRunnable[this.threads];
 		
@@ -106,7 +127,8 @@ public class ParallelBruteForceUniverse extends UniverseTemplate {
 	
 	public void update(double dt) {
 		this.finishedUpdating = new CountDownLatch(this.t.length);
-		
+        this.current_dt = dt;
+
 		for (int c = 0; c < this.t.length; c++) {
 			semaforo_update.release();
 		}
@@ -115,8 +137,8 @@ public class ParallelBruteForceUniverse extends UniverseTemplate {
 	      try {
 			this.finishedUpdating.await();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Proceso interrumpido");
+			System.exit(1);
 		} 
 	}
 	

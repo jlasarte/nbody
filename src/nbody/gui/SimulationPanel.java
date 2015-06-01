@@ -12,6 +12,8 @@ import java.awt.geom.Ellipse2D;
 import java.io.FileNotFoundException;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -21,7 +23,7 @@ import nbody.model.universe.*;
 
 
 /**
- * Panel donde se anima la simulaci贸n del movimiento de los N-cuerpos.
+ * Panel donde se anima la simulaci髇 del movimiento de los N-cuerpos.
  * @author jlasarte
  */
 public class SimulationPanel extends JPanel {
@@ -42,14 +44,16 @@ public class SimulationPanel extends JPanel {
      */
     private Timer t;
     /**
-     * Bot贸n para resetear la simulaci贸n
+     * Boton para resetear la simulacion
      */
 	private JButton reset;
 	/**
 	 * Universo actual
 	 */
 	private String selected_universe;
-	
+	private JComboBox<String> N;
+	private String[] proc = {"1","2","4","8","16","32","64"};
+	private JLabel proc_label;
 	/**
 	 * Constructor.
 	 */
@@ -57,9 +61,19 @@ public class SimulationPanel extends JPanel {
     {
     	this.u = new BarnesHutUniverse();
 		this.reset = new JButton("Reset");
+		this.N = new JComboBox<String>(proc);
 		this.reset.setVisible(false);
+		
+		this.proc_label = new JLabel("Threads");
+		this.proc_label.setForeground(Color.WHITE);
+		
 		this.add(reset);
-
+		this.add(this.proc_label);
+		this.add(N);
+		
+		this.proc_label.setVisible(false);
+		N.setVisible(false);
+		
 		this.reset.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -78,7 +92,7 @@ public class SimulationPanel extends JPanel {
 	}
 
     /**
-     * Inicializa el panel, cargando la simulaci贸n.
+     * Inicializa el panel, cargando la simulacion.
      * @param universe el archivo donde se encuentran los cuerpos a cargar.
      */
 	public void initialize(String universe) {
@@ -95,7 +109,7 @@ public class SimulationPanel extends JPanel {
     }
     
 	/**
-	 * Comienza la simulaci贸n
+	 * Comienza la simulacion
 	 * @param dt el delta tiempo para utilizar en las simulaciones.
 	 */
     public void start(double dt) {
@@ -155,7 +169,7 @@ public class SimulationPanel extends JPanel {
 	}
     
     /**
-     * Detiene la simulaci贸n.
+     * Detiene la simulacion.
      */
 	public void stop() {
 		t.stop();
@@ -165,18 +179,28 @@ public class SimulationPanel extends JPanel {
 		switch (simulation) {
 		case "barnes" : 
 			this.u = new BarnesHutUniverse();
+			proc_label.setVisible(false);
+			N.setVisible(false);
 			break;
 		case "brute":
 			this.u = new SecuentialBruteForceUniverse();
+			proc_label.setVisible(false);
+			N.setVisible(false);
 			break;
 		case "brutep":
-			this.u = new ParallelBruteForceUniverse(Runtime.getRuntime().availableProcessors());
+			proc_label.setVisible(true);
+			N.setVisible(true);
+			this.u = new ParallelBruteForceUniverse(Integer.parseInt(this.N.getSelectedItem().toString()));
 			break;
 		case "barnesp":
-			this.u = new ParallelBarnesHutUniverse(Runtime.getRuntime().availableProcessors());
+			proc_label.setVisible(true);
+			N.setVisible(true);
+			this.u = new ParallelBarnesHutUniverse(Integer.parseInt(this.N.getSelectedItem().toString()));
 			break;
 		case "barnespb":
-			this.u = new ParallelBalancedBarnesHutUniverse(Runtime.getRuntime().availableProcessors());
+			proc_label.setVisible(true);
+			N.setVisible(true);
+			this.u = new ParallelBalancedBarnesHutUniverse(Integer.parseInt(this.N.getSelectedItem().toString()));
 			break;
 		default:
 			JOptionPane.showMessageDialog(null, "Algoritmo no permitido");

@@ -16,17 +16,17 @@ public abstract class UniverseTemplate implements UniverseInterface {
 	 */
 	protected int N = 0;
 	/**
-	 * Radio del universo, usado para escalar la visualización
+	 * Radio del universo, usado para escalar la visualizacion
 	 */
 	protected double R = 0.0;
 	
 	/**
 	 * Arreglo de cuerpos en el universo.
 	 */
-	protected Body[] bodies_array = new Body[0]; // inicializamos en 0 para no tener problemas ocn la visalización hasta que el universo se inicializa.
+	protected Body[] bodies_array = new Body[0]; // inicializamos en 0 para no tener problemas ocn la visalizacion hasta que el universo se inicializa.
 
 	/**
-	 * Método donde iniciar estructuras de datos específicas del universo. Es responsabilidad de las subclases.
+	 * Método donde iniciar estructuras de datos especificas del universo. Es responsabilidad de las subclases.
 	 */
 	protected abstract void initializeDataStructures();
 	
@@ -104,12 +104,9 @@ public abstract class UniverseTemplate implements UniverseInterface {
 		
 		Body[] giveback = new Body[count];
 		double x,y,z;
-		double mass,radius;
-		double vx=0,vy=0;
+		double mass;
 		Random rand = new Random();
 		for (int i=1;i<count;i++){
-			// create radius
-			radius=rand.nextDouble()*(max_radius-min_radius)+min_radius;
 			// generate position and velocity...for now the the disk will
 			// remain flat on the XY plain...that may change
 			x = disk_x+rand.nextGaussian()*disk_radius;
