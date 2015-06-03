@@ -22,6 +22,7 @@ import nbody.model.universe.*;
  *		</li>
  *		<li>-f,--file=ARCHIVO: El <b>ARCHIVO</b> de donde cargar los datos de los cuerpos. Se incluyen algunos archivos de ejemplo en el codigo fuente de este programa.</li>
  *		<li>-n,--ncuerpos=N: El algoritmo se corre con <b>N</b> cantidad de cuerpos random.</li>
+ *		<li>-help: Muestrea la ayuda </li>
  *	</ul>
  * 
  * @author jlasarte
